@@ -3,7 +3,7 @@
 #include <r_types.h>
 
 enum{
-	SNES_OP_8BIT	=	1,
+	SNES_OP_8BIT,
 	SNES_OP_16BIT,
 	SNES_OP_24BIT,
 	SNES_OP_32BIT,
