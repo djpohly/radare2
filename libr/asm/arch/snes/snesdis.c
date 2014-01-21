@@ -10,6 +10,7 @@
 static int snesDisass(RAsm *a, RAsmOp *op, const ut8 *buf, ut64 len)
 {
 	int bits, n;
+	ut64 dest;
 
 	switch(snes_op[buf[0]].type)
 	{
@@ -71,6 +72,18 @@ static int snesDisass(RAsm *a, RAsmOp *op, const ut8 *buf, ut64 len)
 				return 0;
 			sprintf (op->buf_asm, snes_op[buf[0]].name,buf[1]+0x100*buf[2]+0x10000*buf[3]);
 			return 4;
+		case SNES_OP_PCREL:
+			if (len < 2)
+				return 0;
+			dest = a->pc + 2 + (st8) buf[1];
+			sprintf(op->buf_asm, "%s 0x%06x", snes_op[buf[0]].name, dest);
+			return 2;
+		case SNES_OP_PCREL_LONG:
+			if (len < 3)
+				return 0;
+			dest = a->pc + 3 + 0x100 * (st8) buf[2] + buf[1];
+			sprintf(op->buf_asm, "%s 0x%06x", snes_op[buf[0]].name, dest);
+			return 3;
 		default:
 			return 0;
 	}
